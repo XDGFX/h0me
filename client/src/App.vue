@@ -1,38 +1,49 @@
 <template>
     <div
         class="bg-zinc-900 h-screen flex overflow-hidden"
-        :class="menuBarTop ? 'flex-col' : 'flex-col-reverse'"
+        :class="settings.menuBarTop ? 'flex-col' : 'flex-col-reverse'"
     >
         <!-- Search bar -->
         <div
             v-show="searchVisible"
             class="fixed top-0 left-0 w-full h-full flex flex-col items-center bg-zinc-900 bg-opacity-50"
         >
-            <input
-                v-model="search"
-                type="text"
-                class="opacity-0 w-0 h-0"
-                placeholder="Search..."
-                ref="search"
-                @blur="hideSearch"
-            />
-
             <div class="h-[46vh]"></div>
 
-            <div
-                class="flex w-[12em] h-16 text-4xl font-mono bg-zinc-900 items-center p-2"
-            >
-                <span class="-translate-y-[2px]">
-                    {{ search.replace(/ /g, ".") }}
-                </span>
+            <div class="relative">
+                <input
+                    v-model="search"
+                    type="text"
+                    class="w-[12em] bg-zinc-900 text-4xl px-2 font-mono focus:outline-none caret-zinc-900"
+                    placeholder=""
+                    ref="search"
+                    @blur="hideSearch"
+                    @input="searchChange"
+                    @keydown="searchChange"
+                    @keyup="searchChange"
+                    @click="searchChange"
+                />
 
-                <!-- Fake cursor -->
-                <span class="w-4 h-8 bg-zinc-800 ml-1"></span>
+                <!-- Text on top of caret -->
+                <span
+                    class="absolute inset-0 w-[12em] pt-1 text-4xl px-2 font-mono z-10 pointer-events-none"
+                >
+                    {{ search }}</span
+                >
+
+                <!-- Blinking caret -->
+                <span
+                    class="absolute w-4 h-full bg-zinc-800 ml-1 caret"
+                    ref="caret"
+                    :style="{
+                        left: caretPosition * 1.36 + 0.5 + 'em',
+                    }"
+                ></span>
             </div>
 
             <!-- Results -->
             <div
-                class="flex items-center justify-center bg-zinc-900 bg-opacity-50"
+                class="flex items-center justify-center bg-zinc-900 bg-opacity-50 overflow-x-scroll"
                 v-show="searchVisible && search.length > 0"
             >
                 <div
@@ -113,7 +124,7 @@
         <!-- Menu bar -->
         <div
             class="w-full h-4 hover:h-16 flex gap-4 justify-center font-mono transition-all duration-100 ease-in-out z-50"
-            :class="menuBarTop ? 'mb-px' : 'mt-px'"
+            :class="settings.menuBarTop ? 'mb-px' : 'mt-px'"
         >
             <div class="flex gap-[2px]">
                 <button
@@ -155,46 +166,46 @@
                 </button>
             </div>
 
-            <div
-                v-for="(link, index) in links"
-                :key="index"
-                class="flex hover:bg-teal-300 hover:text-zinc-900"
-            >
-                <button
-                    class="w-6 h-full flex items-center justify-center translate-y-px"
-                >
-                    <!-- X svg -->
-                    <svg
-                        class="w-4 h-4 hover:text-[#EA5D72]"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        @click="removeLink(index)"
+            <div class="flex-1 overflow-x-scroll overflow-y-clip">
+                <div class="flex h-full">
+                    <div
+                        v-for="(link, index) in links"
+                        :key="index"
+                        class="flex h-full justify-center items-center hover:bg-teal-300 hover:text-zinc-900 px-2 group"
                     >
-                        <path
-                            fill-rule="evenodd"
-                            d="M5.293 5.293a1 1 0 011.414 0L10 8.586l3.293-3.293a1 1 0 111.414 1.414L11.414 10l3.293 3.293a1 1 0 01-1.414 1.414L10 11.414l-3.293 3.293a1 1 0 01-1.414-1.414L8.586 10 5.293 6.707a1 1 0 010-1.414z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
-                </button>
+                        <button class="flex items-center h-full translate-y-px">
+                            <!-- X svg -->
+                            <svg
+                                class="w-0 group-hover:w-4 h-4 hover:text-[#EA5D72] mr-1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                @click="removeLink(index)"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M5.293 5.293a1 1 0 011.414 0L10 8.586l3.293-3.293a1 1 0 111.414 1.414L11.414 10l3.293 3.293a1 1 0 01-1.414 1.414L10 11.414l-3.293 3.293a1 1 0 01-1.414-1.414L8.586 10 5.293 6.707a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                        </button>
 
-                <a
-                    @click="updateCurrentLink(index)"
-                    class="pr-2 h-full flex items-center cursor-pointer"
-                >
-                    {{ link.title }}
-                </a>
+                        <a
+                            @click="updateCurrentLink(index)"
+                            class="h-full flex items-center cursor-pointer -translate-y-px"
+                        >
+                            {{ link.title }}
+                        </a>
+                    </div>
+                </div>
             </div>
-
-            <div class="flex-1"></div>
 
             <!-- Move menu bar to bottom button -->
             <button
                 class="w-6 h-full flex items-center justify-center hover:bg-zinc-800"
-                @click="menuBarTop = !menuBarTop"
+                @click="settings.menuBarTop = !settings.menuBarTop"
             >
-                <span :class="menuBarTop ? 'rotate-180' : ''">
+                <span :class="settings.menuBarTop ? 'rotate-180' : ''">
                     <!-- svg of down arrow with line at top -->
                     <svg
                         class="w-4 h-4"
@@ -224,8 +235,8 @@
 <script>
 import Fuse from "fuse.js";
 
-// Load links from localStorage
 const links = JSON.parse(localStorage.getItem("links")) || [];
+const settings = JSON.parse(localStorage.getItem("settings")) || {};
 
 const fuseOptions = {
     keys: ["title", "tags"],
@@ -244,16 +255,22 @@ export default {
 
             newLinkVisible: false,
 
-            menuBarTop: true,
+            settings: {
+                menuBarTop: true,
+                ...settings,
+            },
 
             links,
             currentLink: -1,
             searchOffset: 0,
+
+            caretPosition: 0,
         };
     },
     methods: {
         openSearch() {
             this.search = "";
+            this.caretPosition = 0;
             this.searchOffset = 0;
             this.searchVisible = true;
 
@@ -272,6 +289,21 @@ export default {
             this.searchVisible = false;
         },
 
+        searchChange(e) {
+            // Limit search to 18 characters
+            this.search = this.search.slice(0, 18);
+
+            this.caretPosition = e.target.selectionStart;
+
+            // Remove and re-add caret class to force it to blink
+            const caret = this.$refs.caret;
+            caret.classList.remove("caret");
+
+            setTimeout(() => {
+                caret.classList.add("caret");
+            }, 0);
+        },
+
         hideNewLink() {
             // If currentLink is -1, force search to be visible
             if (this.currentLink === -1) {
@@ -281,35 +313,19 @@ export default {
             this.newLinkVisible = false;
         },
 
-        // Add new link
         addLink(url, title, tags) {
-            // Add new link to links array
             this.links.push({
                 url,
                 title,
                 tags,
             });
-
-            // Save links to localStorage
-            localStorage.setItem("links", JSON.stringify(this.links));
-
-            // Update fuse
-            fuse = new Fuse(this.links, fuseOptions);
         },
 
-        // Remove link
         removeLink(index) {
             // Remove link from links array
             this.links.splice(index, 1);
-
-            // Save links to localStorage
-            localStorage.setItem("links", JSON.stringify(this.links));
-
-            // Update fuse
-            fuse = new Fuse(this.links, fuseOptions);
         },
 
-        // Update current link
         updateCurrentLink(link) {
             // If currentLink is -1, force search to be visible
             if (link === -1) {
@@ -325,8 +341,6 @@ export default {
     mounted() {
         // Add "." and "Escape" key listeners to the window
         const keyWindowListener = (e) => {
-            console.log(e.key);
-
             if (e.key === ".") {
                 this.openSearch();
             }
@@ -350,7 +364,7 @@ export default {
 
             if (e.key === "Enter") {
                 this.updateCurrentLink(
-                    this.filteredLinks[this.searchOffset].refIndex
+                    this.filteredLinks.at(this.searchOffset)?.refIndex ?? -1
                 );
             }
         };
@@ -364,6 +378,9 @@ export default {
         filteredLinks() {
             const filteredLinks = fuse.search(this.search);
 
+            // Limit to 5 results
+            filteredLinks.length = Math.min(filteredLinks.length, 5);
+
             // Ensure searchOffset is within bounds
             this.searchOffset = Math.max(
                 Math.min(this.searchOffset, filteredLinks.length - 1),
@@ -373,7 +390,58 @@ export default {
             return filteredLinks;
         },
     },
+    watch: {
+        links: {
+            handler() {
+                // Save links to localStorage
+                localStorage.setItem("links", JSON.stringify(this.links));
+
+                // Update fuse
+                fuse = new Fuse(this.links, fuseOptions);
+            },
+            deep: true,
+        },
+
+        // Save settings to localStorage
+        settings: {
+            handler() {
+                localStorage.setItem("settings", JSON.stringify(this.settings));
+            },
+            deep: true,
+        },
+    },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+::-moz-selection {
+    /* Code for Firefox */
+    @apply bg-zinc-800;
+}
+
+::selection {
+    @apply bg-zinc-800;
+}
+
+/* Blink should instantly transition from 0 to 1 opacity */
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    40% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    90% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.caret {
+    animation: 1s blink 0.25s infinite;
+}
+</style>
