@@ -1,40 +1,23 @@
-# h0me
+### /home
 
-This template should help get you started developing with Vue 3 in Vite.
+A new, minimal, and fast, frontent for your homelab.
 
-## Recommended IDE Setup
+---
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+![/home taskbar visible at the bottom of the screen](/media/readme1.png)
+_/home taskbar visible at the bottom of the screen_
 
-## Type Support for `.vue` Imports in TS
+![/home taskbar active](/media/readme2.png)
+_/home taskbar active_
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+![/home search active, with taskbar at the top](/media/readme3.png)
+_/home search active, with taskbar at the top_
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+---
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+### Usage
 
-## Customize configuration
+Either build and run locally, or use the hosted version at
+[https://xdgfx.github.io/slash-home](https://xdgfx.github.io/slash-home).
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
+Links are saved in the browser's local storage, so they will persist across sessions, but are not shared with the server so are kept private.
