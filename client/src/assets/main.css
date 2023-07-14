@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;700&family=Roboto:wght@300;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    .font-mono {
+        font-family: "Roboto Mono", monospace !important;
+    }
+
+    html {
+        font-family: "Roboto Mono", monospace;
+        font-family: "Roboto", sans-serif;
+
+        @apply text-white;
+        @apply font-light;
+        @apply bg-gradient-to-b from-zinc-900 to-zinc-950;
+        @apply bg-zinc-950;
+        @apply antialiased;
+    }
+
+    html,
+    body {
+        height: 100%;
+    }
+}
