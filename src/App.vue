@@ -84,7 +84,7 @@
                 <!-- URL -->
                 <input
                     type="text"
-                    class="w-full h-8 bg-zinc-800 text-2xl px-2 font-mono focus:border border-teal-300 focus:outline-none"
+                    class="w-full h-8 bg-zinc-800 text-2xl px-2 font-mono border border-opacity-0 focus:border-opacity-100 border-teal-300 focus:outline-none"
                     placeholder="URL"
                     ref="url"
                 />
@@ -92,7 +92,7 @@
                 <!-- Title -->
                 <input
                     type="text"
-                    class="w-full h-8 bg-zinc-800 text-2xl px-2 font-mono focus:border border-teal-300 focus:outline-none"
+                    class="w-full h-8 bg-zinc-800 text-2xl px-2 font-mono border border-opacity-0 focus:border-opacity-100 border-teal-300 focus:outline-none"
                     placeholder="TITLE"
                     ref="title"
                 />
@@ -100,7 +100,7 @@
                 <!-- Tags -->
                 <input
                     type="text"
-                    class="w-full h-8 bg-zinc-800 text-2xl px-2 font-mono focus:border border-teal-300 focus:outline-none"
+                    class="w-full h-8 bg-zinc-800 text-2xl px-2 font-mono border border-opacity-0 focus:border-opacity-100 border-teal-300 focus:outline-none"
                     placeholder="TAG1,TAG2,TAG3"
                     ref="tags"
                 />
@@ -108,7 +108,7 @@
                 <!-- Submit button -->
                 <button
                     type="submit"
-                    class="w-full h-8 bg-zinc-800 text-2xl px-2 font-mono hover:border border-teal-300 focus:outline-none"
+                    class="w-full h-8 bg-zinc-800 text-2xl px-2 font-mono border border-opacity-0 hover:border-opacity-100 border-teal-300 focus:outline-none"
                 >
                     ADD
                 </button>
@@ -171,7 +171,7 @@
                     <div
                         v-for="(link, index) in links"
                         :key="index"
-                        class="flex h-full justify-center items-center hover:bg-teal-300 hover:text-zinc-900 px-2 group"
+                        class="flex h-full justify-center items-center hover:bg-teal-300 hover:text-zinc-900 px-2 group whitespace-nowrap"
                     >
                         <button class="flex items-center h-full translate-y-px">
                             <!-- X svg -->
@@ -409,13 +409,22 @@ export default {
 </script>
 
 <style scoped>
-::-moz-selection {
+.bg-zinc-900::-moz-selection {
     /* Code for Firefox */
     @apply bg-zinc-800;
 }
 
-::selection {
+.bg-zinc-900::selection {
     @apply bg-zinc-800;
+}
+
+::-moz-selection {
+    /* Code for Firefox */
+    @apply bg-zinc-900;
+}
+
+::selection {
+    @apply bg-zinc-900;
 }
 
 /* Blink should instantly transition from 0 to 1 opacity */
