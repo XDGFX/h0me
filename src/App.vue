@@ -339,12 +339,7 @@ export default {
         },
     },
     mounted() {
-        // Add "." and "Escape" key listeners to the window
         const keyWindowListener = (e) => {
-            if (e.key === ".") {
-                this.openSearch();
-            }
-
             if (e.key === "Escape") {
                 this.hideSearch();
                 this.hideNewLink();
