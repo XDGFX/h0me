@@ -225,6 +225,8 @@
 
         <iframe
             ref="iframe"
+            frameborder="0"
+            allow="fullscreen"
             :src="currentLink !== -1 ? links[currentLink].url : ''"
             class="w-full h-full"
             pointer-events="none"
