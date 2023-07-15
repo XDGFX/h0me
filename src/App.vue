@@ -224,10 +224,12 @@
         </div>
 
         <iframe
+            v-for="(link, index) in links"
+            v-show="currentLink === index"
             ref="iframe"
             frameborder="0"
             allow="fullscreen"
-            :src="currentLink !== -1 ? links[currentLink].url : ''"
+            :src="loadedLinks[index] ? link.url : ''"
             class="w-full h-full"
             pointer-events="none"
         ></iframe>
@@ -267,6 +269,8 @@ export default {
             searchOffset: 0,
 
             caretPosition: 0,
+
+            loadedLinks: [],
         };
     },
     methods: {
@@ -338,6 +342,9 @@ export default {
             // Update iframe src
             this.currentLink = link;
             this.hideSearch();
+
+            // Add link to loadedLinks
+            this.loadedLinks[this.currentLink] = true;
         },
     },
     mounted() {
